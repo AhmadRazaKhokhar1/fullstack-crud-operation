@@ -6,7 +6,7 @@ import axios from 'axios'
 dotenv.config()
 
 //connecting to DB
-mongoose.connect('mongodb+srv://ahmadrazakhokhar:ahmadraza786@cluster0.ylryeuq.mongodb.net/test?retryWrites=true&w=majority');
+mongoose.connect('mongodb+srv://usernamer:<password>@cluster0.ylryeuq.mongodb.net/test?retryWrites=true&w=majority');
 
 const productSchema =  new mongoose.Schema({
     productName:String,
