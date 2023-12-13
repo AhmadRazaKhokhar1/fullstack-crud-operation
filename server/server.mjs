@@ -5,9 +5,6 @@ import dotenv from 'dotenv';
 import axios from 'axios'
 dotenv.config()
 
-//connecting to DB
-mongoose.connect('mongodb+srv://usernamer:<password>@cluster0.ylryeuq.mongodb.net/test?retryWrites=true&w=majority');
-
 const productSchema =  new mongoose.Schema({
     productName:String,
     productPrice:Number,
@@ -82,3 +79,18 @@ app.listen(8000, ()=>{
     console.log(`server is live at 8000`);
 })
 
+/////////////////////////////////////////////////////////////////////////////////////////////////
+let dbURI = 'mongodb+srv://ahmadrazakhokhar:ahmadraza786@cluster0.ylryeuq.mongodb.net/test?retryWrites=true&w=majority';
+mongoose.connect(dbURI);
+
+////////////////mongodb connected disconnected events///////////////////////////////////////////////
+mongoose.connection.on('connected', function () {//connected
+    console.log("Mongoose is connected");
+});
+
+mongoose.connection.on('disconnected', function () {//disconnected
+    console.log("Mongoose is disconnected");
+    process.exit(1);
+});
+
+////////////////mongodb connected disconnected events///////////////////////////////////////////////
