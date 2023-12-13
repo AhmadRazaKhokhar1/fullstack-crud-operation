@@ -80,7 +80,7 @@ app.listen(8000, ()=>{
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
-let dbURI = 'mongodb+srv://ahmadrazakhokhar:ahmadraza786@cluster0.ylryeuq.mongodb.net/test?retryWrites=true&w=majority';
+let dbURI = 'mongodb+srv://username:<password>@cluster0.ylryeuq.mongodb.net/test?retryWrites=true&w=majority';
 mongoose.connect(dbURI);
 
 ////////////////mongodb connected disconnected events///////////////////////////////////////////////
