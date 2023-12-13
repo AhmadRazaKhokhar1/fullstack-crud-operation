@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <title>Products</title>
+    <style>
+        form{
+            border: 1px solid grey;
+            box-shadow: 5px 5px 15px grey;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 15px;
+            width: 400px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Products page</h1>
+    <a href="./index.html">Home</a>
+    <a href="./product.html">Products</a>
+<button onclick="fetchData(); return false">Get All Products</button>  
+
+    <div id="message"></div>
+    <div id="updatePanel"></div>
+   
+
+    <div id="productContainer" style="display:flex; flex-direction: column-reverse;"></div>
+    <script>
+        const fetchData = async()=>{
+           try {
+            
+               const response = await axios.get('http://localhost:8000/data');
+               const data = response.data.data;
+               data.map((e)=>{
+                   
+                   const DataOfProducts = `
+                   <form id='product_${e._id}'>
+                      <div>${e.productName}</div>
+                      <div>${e.productPrice}</div>
+                      <div>${e.currencyCode}</div>
+                      <div>${e.isFreeShipping}</div>
+                      <div>${e.numberOfSale}</div>
+                      <div>${e.rating}</div>
+                      <div>${e.shopName}</div>
+
+                      <button onclick="deleteProduct('${e._id}'); return false">Delete</button>
+                      <button onclick="updateProduct('${e._id}'); return false">Edit</button>
+                  </form>
+                   
+          `
+          document.getElementById('productContainer').innerHTML += DataOfProducts
+               });
+               document.getElementById(`message`).innerHTML = response.data.message;
+               setTimeout(() => {
+                document.getElementById(`message`).innerHTML = '';
+               }, 4000);
+           } catch (error) {
+            console.log(`Error in fetching Data: ${error}`)
+           }
+        }
+        // deleting product by id:
+       async function deleteProduct(id){
+         try {
+            const response = await axios.delete(`http://localhost:8000/product/${id}`);
+            document.getElementById(`product_${id}`).remove();
+
+            document.getElementById(`message`).innerHTML = response.data.message;
+               setTimeout(() => {
+                document.getElementById(`message`).innerHTML = '';
+               }, 4000);
+         } catch (error) {
+            console.log(error)
+         }
+       }
+       //update product by id:
+       async function updateProduct(id){
+        try {
+            const response = await axios.get(`http://localhost:8000/product/${id}`);
+            const data = response.data.result;
+           console.log(data)
+           
+                const DataFetched = `
+                <form onsubmit="update('${data._id}'); return false" id='updateForm_${data._id}'>
+                    <label for="product name">Product Name</label>
+                    <input type="text" id="productName"  value='${data.productName}' />
+                    
+                    <label for="Product Price">Product Price</label>
+                    <input type="number" id="productPrice"   value='${data.productPrice}'/>
+                    
+                    <label for="Currency Code">Currency Code</label>
+                    <input type="text" id="currencyCode"   value='${data.currencyCode}'/>
+
+                    <label for="Number of Sale">Number of Sale</label>
+                    <input type="number" id="numberOfSale"   value='${data.numberOfSale}'/>
+
+                    <label for="Product Rating">Product Rating</label>
+                    <input type="number" min="0" max="5" id="rating"   value='${data.rating}'/>
+
+                    <label for="isFreeShipping">Free Shipping</label>
+                    <select name="isFreeShipping" id="isFreeShipping"  value='${data.isFreeShipping}'>
+                        <option value="yes" selected>Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    
+                    <label for="shopName">shop Name</label>
+                    <input type="text" id="shopName" value='${data.shopName}' />
+                <br>
+                    <input type="submit" value="Update product" />
+           </form>
+                `
+                document.getElementById('updatePanel').innerHTML = DataFetched;
+
+
+                
+                
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        //insert updated data
+        async function update(id){
+            const name = document.getElementById(`productName`).value;
+            const price = document.getElementById(`productPrice`).value;
+            const currency = document.getElementById(`currencyCode`).value;
+            const sales = document.getElementById(`numberOfSale`).value;
+            const shipping = document.getElementById(`isFreeShipping`).value;
+            const rating = document.getElementById(`rating`).value;
+            const shopName = document.getElementById(`shopName`).value;
+
+            const responseData = await axios.put(`http://localhost:8000/product/${id}`, {
+       
+               productName: name,
+                productPrice: price, 
+                currencyCode: currency, 
+                numberOfSale:sales, 
+                isFreeShipping:shipping, 
+                rating :rating, 
+                shopName:shopName
+            });
+            document.getElementById(`updateForm_${id}`).remove();
+           document.getElementById(`message`).innerHTML = responseData.data.message;
+            // Update the product details in the existing product container
+    const productContainer = document.getElementById(`product_${id}`);
+    productContainer.innerHTML = `
+        <div>${name}</div>
+        <div>${price}</div>
+        <div>${currency}</div>
+        <div>${shipping}</div>
+        <div>${sales}</div>
+        <div>${rating}</div>
+        <div>${shopName}</div>
+        <button onclick="deleteProduct('${id}'); return false">Delete</button>
+        <button onclick="updateProduct('${id}'); return false">Edit</button>
+    `;
+           setTimeout(() => {
+            document.getElementById(`message`).innerHTML = '';
+           }, 4000);
+        }
+    </script>
+</body>
+</html>
+

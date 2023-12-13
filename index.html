@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <title>Home</title>
+</head>
+<style>
+
+    form{
+        display: flex;  
+        flex-direction: column;
+        align-items: start;
+    }
+    form input, select{
+        width: 40vw;
+    }
+    
+</style>
+<body>
+   
+    <h1>Add a product</h1>
+
+    <a href="./index.html">Home</a>
+    <a href="./product.html">Products</a>
+<br><br>
+    <form onsubmit="createProduct(); return false">
+       <label for="product name">Product Name</label>
+       <input type="text" id="productName" required />
+       
+       <label for="Product Price">Product Price</label>
+       <input type="number" id="productPrice" required />
+       
+       <label for="Currency Code">Currency Code</label>
+       <input type="text" id="currencyCode" required />
+
+       <label for="Number of Sale">Number of Sale</label>
+       <input type="number" id="numberOfSale" required />
+
+       <label for="Product Rating">Product Rating</label>
+       <input type="number" min="0" max="5" id="rating" required />
+
+       <label for="isFreeShipping">Free Shipping</label>
+       <select name="isFreeShipping" id="isFreeShipping" >
+        <option value="yes" selected>Yes</option>
+        <option value="no">No</option>
+       </select>
+       
+       <label for="shopName">shop Name</label>
+       <input type="text" id="shopName" required>
+<br>
+       <input type="submit" value="Add to Data Base" />
+    </form>
+
+
+    <p id="message"></p>
+
+
+    <script>
+       let baseUrl;
+       if(window.location.href.indexOf('https') === -1){
+        baseUrl = 'http://localhost:8000';
+       }else{
+        baseUrl = 'http://localhost:8000'
+       }
+       function createProduct(){
+        let productName =document.getElementById("productName").value;
+        let productPrice =document.getElementById("productPrice").value;
+        let currencyCode =document.getElementById("currencyCode").value;
+        let numberOfSale =document.getElementById("numberOfSale").value;
+        let rating =document.getElementById("rating").value;
+        let isFreeShipping =document.getElementById("isFreeShipping").value;
+        let shopName =document.getElementById("shopName").value;
+
+        axios.post(`${baseUrl}/post`, {
+            productName,
+            productPrice,
+            currencyCode,
+            numberOfSale,
+            rating,
+            isFreeShipping,
+            shopName,
+        })
+        .then(function(response){
+            console.log(response.data);
+      
+            document.getElementById(`message`).innerHTML = response.data.message;
+               setTimeout(() => {
+                document.getElementById(`message`).innerHTML = '';
+               }, 4000);
+            document.getElementById("productName").value ='';
+           document.getElementById("productPrice").value ='';
+           document.getElementById("currencyCode").value ='';
+           document.getElementById("numberOfSale").value ='';
+           document.getElementById("rating").value ='';
+           document.getElementById("isFreeShipping").value ='';
+           document.getElementById("shopName").value ='';
+        }).catch(function(error){
+            console.log("error in axios post"+ error);
+            document.querySelector('#message').innerHTML = error;
+            })
+        }
+    </script>
+</body>
+</html>
