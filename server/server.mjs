@@ -4,7 +4,7 @@ import mongoose, { mongo } from 'mongoose'
 import dotenv from 'dotenv';
 import axios from 'axios'
 dotenv.config()
-
+const port = process.env.PORT
 const productSchema =  new mongoose.Schema({
     productName:String,
     productPrice:Number,
@@ -75,12 +75,12 @@ app.put('/product/:id', async(req, res)=>{
 
 
 //listening to the server
-app.listen(8000, ()=>{
+app.listen(port, ()=>{
     console.log(`server is live at 8000`);
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
-let dbURI = 'mongodb+srv://username:<password>@cluster0.ylryeuq.mongodb.net/test?retryWrites=true&w=majority';
+let dbURI = process.env.URI;
 mongoose.connect(dbURI);
 
 ////////////////mongodb connected disconnected events///////////////////////////////////////////////
