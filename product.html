@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
+<link rel="stylesheet" href="./css.css">
     <title>Products</title>
     <style>
         form{
@@ -38,7 +38,9 @@
                data.map((e)=>{
                    
                    const DataOfProducts = `
+                   <link rel="stylesheet" href="./css.css">
                    <form id='product_${e._id}'>
+                    <img src="./abc.png" alt="ABC">
                       <div>${e.productName}</div>
                       <div>${e.productPrice}</div>
                       <div>${e.currencyCode}</div>
@@ -84,7 +86,9 @@
            console.log(data)
            
                 const DataFetched = `
+                <link rel="stylesheet" href="./css.css">
                 <form onsubmit="update('${data._id}'); return false" id='updateForm_${data._id}'>
+                    <img src="./abc.png" alt="ABC">
                     <label for="product name">Product Name</label>
                     <input type="text" id="productName"  value='${data.productName}' />
                     
@@ -146,6 +150,8 @@
             // Update the product details in the existing product container
     const productContainer = document.getElementById(`product_${id}`);
     productContainer.innerHTML = `
+    <link rel="stylesheet" href="./css.css">
+    <img src="./abc.png" alt="ABC">
         <div>${name}</div>
         <div>${price}</div>
         <div>${currency}</div>
