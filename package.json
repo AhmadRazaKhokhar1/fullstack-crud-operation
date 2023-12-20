@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.mjs",
   "scripts": {
-    "dev": "nodemon ./server/server.mjs",
-    "start": "node ./server/server.mjs"
+    "dev": "node api.js && nodemon ./server/server.mjs",
+    "start": "node api.js && node ./server/server.mjs"
   },
   "author": "",
   "license": "ISC",
